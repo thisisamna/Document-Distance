@@ -50,7 +50,12 @@ namespace DocumentDistance
                     }
                 }
             }
+        
             int d1xd2 = 0;
+            foreach(string key in vectors.Keys)
+            {
+                d1xd2 += vectors[key][0] * vectors[key][1];
+            }
             
 
             throw new NotImplementedException();
