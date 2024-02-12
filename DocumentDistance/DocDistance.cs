@@ -40,14 +40,14 @@ namespace DocumentDistance
 
                 foreach (Match result in matches)
                 {
-                    word = result.ToString();
+                    word = result.ToString().ToLower();
                     if(vector[i].ContainsKey(word))
                     {
-                        vector[i][result.ToString()] += 1;
+                        vector[i][word] += 1;
                     }
                     else
                     {
-                        vector[i][result.ToString()] = 1;
+                        vector[i][word] = 1;
 
                     }
                 }
