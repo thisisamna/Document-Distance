@@ -29,9 +29,7 @@ namespace DocumentDistance
             doc[0] = File.ReadAllText(doc1FilePath);
             doc[1]= File.ReadAllText(doc2FilePath);
 
-            Dictionary<string, int>[] vector = new Dictionary<string, int>[2];
-            vector[0] = new Dictionary<string, int>();
-            vector[1] = new Dictionary<string, int>();
+            Dictionary<string, int[]> vectors = new Dictionary<string, int[]>();
             string word;
             Regex regex = new Regex("(A-Za-z0-9)*");
             for (int i = 0; i < 2; i++)
@@ -41,17 +39,19 @@ namespace DocumentDistance
                 foreach (Match result in matches)
                 {
                     word = result.ToString().ToLower();
-                    if(vector[i].ContainsKey(word))
+                    if(vectors.ContainsKey(word))
                     {
-                        vector[i][word] += 1;
+                        vectors[word][i] += 1;
                     }
                     else
                     {
-                        vector[i][word] = 1;
+                        vectors[word][i] = 1;
 
                     }
                 }
             }
+            int d1xd2 = 0;
+            
 
             throw new NotImplementedException();
         }
