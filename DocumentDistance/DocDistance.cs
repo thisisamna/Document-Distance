@@ -74,12 +74,12 @@ namespace DocumentDistance
                 D1Squared += D1 * D1; ;
                 D2Squared += D2 * D2;
             }
-            double productOfSquares = D1Squared * D2Squared;
+            double productOfSquares =(double) D1Squared * (double)D2Squared;
             double quotient = D1xD2 / (Math.Sqrt(productOfSquares));
             double angle = Math.Acos(quotient);
             angle = angle * 180 / Math.PI;
             Console.WriteLine(angle);
-            return angle;
+            return angle % 180;
         }
     }
 }
