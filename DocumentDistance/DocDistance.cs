@@ -48,6 +48,8 @@ namespace DocumentDistance
                     {
                         vectors[word] = new int[2];
                         vectors[word][i] = 1;
+                        //vectors[word][i+1%2] = 0;
+
 
                     }
                 }
@@ -58,20 +60,25 @@ namespace DocumentDistance
             //    Console.WriteLine(element.Key + "\t" + element.Value[0] + "\t" + element.Value[1]);
             //}
 
-            int d1xd2 = 0;
-            int d1Squared = 0;
-            int d2Squared = 0;
+            int D1xD2 = 0;
+            int D1 = 0;
+            int D2 = 0;
+
+            int D1Squared = 0;
+            int D2Squared = 0;
             foreach(string key in vectors.Keys)
             {
-                d1Squared = vectors[key][0];
-                d2Squared = vectors[key][1]; 
-                d1xd2 += d1Squared * d2Squared; //not squared yet
-                d1Squared *= d1Squared;
-                d2Squared *= d2Squared;
+                D1 = vectors[key][0];
+                D2 = vectors[key][1]; 
+                D1xD2 += D1 * D2; //not squared yet
+                D1Squared += D1 * D1; ;
+                D2Squared += D2 * D2;
             }
-
-
-            throw new NotImplementedException();
+            double productOfSquares = D1Squared * D2Squared;
+            double quotient = D1xD2 / (Math.Sqrt(productOfSquares));
+            double angle = Math.Acos(quotient);
+            Console.WriteLine(angle);
+            return angle;
         }
     }
 }
