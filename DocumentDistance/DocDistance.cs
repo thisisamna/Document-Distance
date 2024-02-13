@@ -31,20 +31,22 @@ namespace DocumentDistance
 
             Dictionary<string, int[]> vectors = new Dictionary<string, int[]>();
             string word;
-            Regex regex = new Regex("(A-Za-z0-9)*");
+            Regex regex = new Regex("([A-Z]|[a-z]|[0-9])+");
             for (int i = 0; i < 2; i++)
             {
                 MatchCollection matches = regex.Matches(doc[i]);
 
                 foreach (Match result in matches)
                 {
-                    word = result.ToString().ToLower();
+                    word = result.Value.ToLower();
+                   
                     if(vectors.ContainsKey(word))
                     {
                         vectors[word][i] += 1;
                     }
                     else
                     {
+                        vectors[word] = new int[2];
                         vectors[word][i] = 1;
 
                     }
@@ -56,7 +58,10 @@ namespace DocumentDistance
             {
                 d1xd2 += vectors[key][0] * vectors[key][1];
             }
-            
+            foreach(KeyValuePair<string, int[]> element in vectors)
+            {
+                Console.WriteLine(element.Key + "\t" + element.Value[0] + "\t" + element.Value[1]);
+            }
 
             throw new NotImplementedException();
         }
