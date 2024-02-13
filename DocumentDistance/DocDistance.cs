@@ -52,16 +52,24 @@ namespace DocumentDistance
                     }
                 }
             }
-        
+
+            //foreach(KeyValuePair<string, int[]> element in vectors)
+            //{
+            //    Console.WriteLine(element.Key + "\t" + element.Value[0] + "\t" + element.Value[1]);
+            //}
+
             int d1xd2 = 0;
+            int d1Squared = 0;
+            int d2Squared = 0;
             foreach(string key in vectors.Keys)
             {
-                d1xd2 += vectors[key][0] * vectors[key][1];
+                d1Squared = vectors[key][0];
+                d2Squared = vectors[key][1]; 
+                d1xd2 += d1Squared * d2Squared; //not squared yet
+                d1Squared *= d1Squared;
+                d2Squared *= d2Squared;
             }
-            foreach(KeyValuePair<string, int[]> element in vectors)
-            {
-                Console.WriteLine(element.Key + "\t" + element.Value[0] + "\t" + element.Value[1]);
-            }
+
 
             throw new NotImplementedException();
         }
