@@ -24,7 +24,8 @@ namespace DocumentDistance
         public static double CalculateDistance(string doc1FilePath, string doc2FilePath)
         {
             // TODO comment the following line THEN fill your code here
-            string[] doc = new string[2];
+            string[]
+                doc = new string[2];
 
             doc[0] = File.ReadAllText(doc1FilePath);
             doc[1]= File.ReadAllText(doc2FilePath);
@@ -90,8 +91,7 @@ namespace DocumentDistance
             //}
 
             double D1xD2 = 0;
-            double D1 = 0;
-            double D2 = 0;
+            double D1, D2;
 
             double D1Squared = 0;
             double D2Squared = 0;
@@ -103,12 +103,8 @@ namespace DocumentDistance
                 D1Squared += D1 * D1; ;
                 D2Squared += D2 * D2;
             }
-            double productOfSquares = D1Squared * D2Squared;
-            double quotient =  D1xD2 / (Math.Sqrt(productOfSquares));
-            double angle = Math.Acos(quotient);
-            angle = angle * 180 / Math.PI;
-            Console.WriteLine(angle);
-            return angle;
+            double quotient =  D1xD2 / (Math.Sqrt(D1Squared * D2Squared));
+            return Math.Acos(quotient) * 180 / Math.PI;
         }
     }
 }
