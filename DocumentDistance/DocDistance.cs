@@ -60,12 +60,12 @@ namespace DocumentDistance
             //    Console.WriteLine(element.Key + "\t" + element.Value[0] + "\t" + element.Value[1]);
             //}
 
-            int D1xD2 = 0;
-            int D1 = 0;
-            int D2 = 0;
+            double D1xD2 = 0;
+            double D1 = 0;
+            double D2 = 0;
 
-            int D1Squared = 0;
-            int D2Squared = 0;
+            double D1Squared = 0;
+            double D2Squared = 0;
             foreach(string key in vectors.Keys)
             {
                 D1 = vectors[key][0];
@@ -75,7 +75,7 @@ namespace DocumentDistance
                 D2Squared += D2 * D2;
             }
             double productOfSquares =(double) D1Squared * (double)D2Squared;
-            double quotient = D1xD2 / (Math.Sqrt(productOfSquares));
+            double quotient = (double) D1xD2 / (Math.Sqrt(productOfSquares));
             double angle = Math.Acos(quotient);
             angle = angle * 180 / Math.PI;
             Console.WriteLine(angle);
