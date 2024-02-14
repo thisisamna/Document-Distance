@@ -30,30 +30,59 @@ namespace DocumentDistance
             doc[1]= File.ReadAllText(doc2FilePath);
 
             Dictionary<string, int[]> vectors = new Dictionary<string, int[]>();
-            string word;
-            Regex regex = new Regex("([A-Z]|[a-z]|[0-9])+");
-            for (int i = 0; i < 2; i++)
-            {
-                MatchCollection matches = regex.Matches(doc[i]);
 
-                foreach (Match result in matches)
+            string word; char letter;
+            for (int d = 0; d < 2; d++)
+            {
+                int length = doc[d].Length;
+                word = "";
+
+                for (int i = 0; i < length; i++)
                 {
-                    word = result.Value.ToLower();
-                   
-                    if(vectors.ContainsKey(word))
+                    letter = doc[d][i];
+                    if (Char.IsLetterOrDigit(letter))
                     {
-                        vectors[word][i] += 1;
+                        word += letter;
+                    }
+                    else if (word.Length>0)
+                    {
+                        word = word.ToLower();
+                         
+                        if (vectors.ContainsKey(word))
+                        {
+                            vectors[word][d] += 1;
+                        }
+                        else
+                        {
+                            vectors[word] = new int[2];
+                            vectors[word][d] = 1;
+                            //vectors[word][i+1%2] = 0;
+
+
+                        }
+                        word = "";
+
+                    }
+                }
+               if (word.Length > 0)
+                {
+                    word = word.ToLower();
+
+                    if (vectors.ContainsKey(word))
+                    {
+                        vectors[word][d] += 1;
                     }
                     else
                     {
                         vectors[word] = new int[2];
-                        vectors[word][i] = 1;
+                        vectors[word][d] = 1;
                         //vectors[word][i+1%2] = 0;
 
 
                     }
                 }
-            }
+
+                }
 
             //foreach(KeyValuePair<string, int[]> element in vectors)
             //{
