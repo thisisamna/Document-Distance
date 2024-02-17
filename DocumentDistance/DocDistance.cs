@@ -22,16 +22,18 @@ namespace DocumentDistance
         /// <param name="doc1FilePath">File path of 1st document</param>
         /// <param name="doc2FilePath">File path of 2nd document</param>
         /// <returns>The angle (in degree) between the 2 documents</returns>
-        private static Dictionary<string, int[]> vectors;
+        private static Dictionary<string, int> vector1;
+        private static Dictionary<string, int> vector2;
+
         private static Semaphore parse = new Semaphore(0, 2);
-        private static Mutex mutex = new Mutex();
         public static double CalculateDistance(string doc1FilePath, string doc2FilePath)
         {
             // TODO comment the following line THEN fill your code here
-            vectors = new Dictionary<string, int[]>();
+            vector1 = new Dictionary<string, int>();
+            vector2 = new Dictionary<string, int>();
 
-            object params1= createParamObject(doc1FilePath, 0);
-            object params2= createParamObject(doc2FilePath, 1);
+            object params1 = createParamObject(doc1FilePath, vector1);
+            object params2= createParamObject(doc2FilePath, vector2);
 
             Thread thread1 = new Thread(new ParameterizedThreadStart(parseDocument));
             Thread thread2 = new Thread(new ParameterizedThreadStart(parseDocument));
@@ -56,10 +58,21 @@ namespace DocumentDistance
 
             double D1Squared = 0;
             double D2Squared = 0;
-            foreach (string key in vectors.Keys)
+            foreach (string key in vector1.Keys)
             {
-                D1 = vectors[key][0];
-                D2 = vectors[key][1];
+                D1 = vector1[key];
+                if (vector2.ContainsKey(key))
+                    D2 = vector2[key];
+                else
+                    D2 = 0;
+                D1xD2 += D1 * D2; //not squared yet
+                D1Squared += D1 * D1; ;
+                D2Squared += D2 * D2;
+            }
+            foreach (string key in vector2.Keys.Except(vector1.Keys))
+            {
+                D1 = 0;
+                D2 = vector2[key];
                 D1xD2 += D1 * D2; //not squared yet
                 D1Squared += D1 * D1; ;
                 D2Squared += D2 * D2;
@@ -77,7 +90,7 @@ namespace DocumentDistance
             //Parameters
             ArrayList parameter = (ArrayList)parameters;
             string path = (string)parameter[0];
-            int docNo = (int)parameter[1];
+            Dictionary<string, int> vector = (Dictionary<string, int>)parameter[1];
 
 
             string doc = File.ReadAllText(path);
@@ -94,20 +107,17 @@ namespace DocumentDistance
                 else if (word.Length > 0)
                 {
                     word = word.ToLower();
-                    mutex.WaitOne();
-                    if (vectors.ContainsKey(word))
+                    if (vector.ContainsKey(word))
                     {
-                        vectors[word][docNo] += 1;
+                        vector[word] += 1;
                     }
                     else
                     {
-                        vectors[word] = new int[2];
-                        vectors[word][docNo] = 1;
-                        //vectors[word][i+1%2] = 0;
+                        vector[word] = 1;
+                        //vector[word][i+1%2] = 0;
 
 
                     }
-                    mutex.ReleaseMutex();
                     word = "";
 
                 }
@@ -115,29 +125,26 @@ namespace DocumentDistance
             if (word.Length > 0)
             {
                 word = word.ToLower();
-                mutex.WaitOne();
 
-                if (vectors.ContainsKey(word))
+                if (vector.ContainsKey(word))
                 {
-                    vectors[word][docNo] += 1;
+                    vector[word] += 1;
                 }
                 else
                 {
-                    vectors[word] = new int[2];
-                    vectors[word][docNo] = 1;
-                    //vectors[word][i+1%2] = 0;
+                    vector[word] = 1;
+                    //vector[word][i+1%2] = 0;
 
                 }
-                mutex.ReleaseMutex();
-
             }
             parse.Release();
         }
-        private static ArrayList createParamObject(string path, int docNo)
+        private static ArrayList createParamObject(string path, Dictionary<string, int> vector)
         {
             ArrayList parameters = new ArrayList();
             parameters.Add(path);
-            parameters.Add(docNo);
+            parameters.Add(vector);
+
             return parameters;
         }
     }
