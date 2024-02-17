@@ -95,10 +95,10 @@ namespace DocumentDistance
 
             double D1Squared = 0;
             double D2Squared = 0;
-            foreach(string key in vectors.Keys)
+            foreach(KeyValuePair<string, int[]> entry in vectors)
             {
-                D1 = vectors[key][0];
-                D2 = vectors[key][1]; 
+                D1 = entry.Value[0];
+                D2 = entry.Value[1]; 
                 D1xD2 += D1 * D2; //not squared yet
                 D1Squared += D1 * D1; ;
                 D2Squared += D2 * D2;
